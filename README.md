@@ -27,7 +27,7 @@ Or with `yarn`
 yarn add @magicul/react-chat-stream
 ```
 
-## Using your own API to stream back chat responses
+## Using your own API to stream back chat-like responses (similar to ChatGPT).
 
 With the `useChatStream` hook, you can easily integrate your own API
 to stream chat responses. The following example demonstrates how to
