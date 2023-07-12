@@ -27,10 +27,11 @@ Or with `yarn`
 yarn add @magicul/react-chat-stream
 ```
 
-## Example: Using your own API to stream chat responses from ChatGPT
+## Using your own API to stream back chat responses
 
 With the `useChatStream` hook, you can easily integrate your own API
-to stream chat responses from ChatGPT.
+to stream chat responses. The following example demonstrates how to
+use the hook to integrate your own API that streams back the results
 
 ```tsx
 import React from 'react';
@@ -47,8 +48,8 @@ function App() {
       url: 'https://your-api-url',
       method: 'POST',
     },
+    // This means that the user input will be sent as the body of the request with the key 'prompt'.
     method: {
-      // This will add a key to the body with the user's input.
       type: 'body',
       key: 'prompt',
     }
@@ -73,11 +74,18 @@ function App() {
 export default App;
 ```
 
+The `useChatStream` hook provides a variable named `messages`. This
+messages variable originates from the internal state of the hook, and
+it contains the chat messages that were sent and were received from
+your API. These messages are delivered to your application as a
+stateful array, updated in real-time as new chat messages are received
+and sent. As a consumer of the hook, you can readily use the messages
+variable in your component to display the ongoing conversation.
+
 **Important: For this to work, your API must stream back the results
 of the AI model as parts of the string you want to display.**
 
 ## API Reference
-
 
 ### Input:
 
