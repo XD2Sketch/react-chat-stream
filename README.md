@@ -80,7 +80,7 @@ it contains the chat messages that were sent and were received from
 your API. These messages are delivered to your application as a
 stateful array, updated in real-time as new chat messages are received
 and sent. As a consumer of the hook, you can readily use the `messages`
-variable in your component to display the ongoing conversation.
+variable in your component to display the ongoing conversation. The `messages` variable will change and will get appended with new messages received from your backend.
 
 **Important: For this to work, your API must stream back the results
 of the AI model as parts of the string you want to display.**
