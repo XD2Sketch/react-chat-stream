@@ -78,7 +78,6 @@ of the AI model as parts of the string you want to display.**
 
 ## API Reference
 
-
 ### Input:
 
 The input of the hook is a configuration object with the following
@@ -117,6 +116,11 @@ The output of this hook is an object with the following properties:
   the form. Pass it to the onSubmit prop of your form.
 - isLoading: `boolean` - a boolean indicating whether the request is
   in progress.
+
+## Examples
+
+If you want to see a working example, check out the [example](./example)
+folder for an example on how to use this package.
 
 ## Important Notes:
 
