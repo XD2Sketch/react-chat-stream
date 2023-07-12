@@ -1,4 +1,4 @@
-  # @magicul/react-chat-stream
+# @magicul/react-chat-stream
 
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@magicul/react-chat-stream)
 ![npm](https://img.shields.io/npm/dt/react-chat-stream)
@@ -6,12 +6,18 @@
 ![npm](https://img.shields.io/npm/v/@magicul/react-chat-stream)
 ![GitHub Repo stars](https://img.shields.io/github/stars/XD2Sketch/react-chat-stream?style=social)
 
-Introducing @magicul/react-chat-stream: A React hook designed to simplify integrating 
+Introducing @magicul/react-chat-stream: A React hook designed to simplify integrating
 chat streams returned by your backend. Let messages appear word-by-word similar to ChatGPT.
 
 ## What's this package about?
 
 Are you building a ChatGPT-like chat interface? Then most likely you'll want to integrate a chat that has the messages appear word-by-word, similar to ChatGPT. Vercel recently release the [Vercel AI SDK](https://vercel.com/blog/introducing-the-vercel-ai-sdk#streaming-first-ui-helpers) which adds _Streaming First UI Helper_, but what if you want to integrate your own backend? This package solves exactly that pain point. We've abstracted the logic into a React Hook to take care of handling everything for you.
+
+## How does it work?
+
+![react-chat-stream-demo-long](https://github.com/XD2Sketch/react-chat-stream/assets/5519740/ab8453e6-1758-4a1e-8bf2-02f587f8c94f)
+
+If you're backend returns `text/event-stream` then you can use this package. This package does not "fake" this response by imitating the word-by-word appearance. It will literally take the responses from your backend as them come in through the stream. The hook provides a `messages` object which will change so you can display it as the result gets delivered.
 
 ## Installation
 
@@ -27,25 +33,22 @@ Or with `yarn`
 yarn add @magicul/react-chat-stream
 ```
 
-## Using your own API to stream back chat-like responses (similar to ChatGPT).
+## Stream chat-like messages from your backend to your React app (similar to ChatGPT).
 
 With the `useChatStream` hook, you can easily integrate your own API
-to stream chat responses. Responses from your backend will appear
+to stream chat responses (`text/event-stream`). Responses from your backend will appear
 word-by-word to give it a ChatGPT-like user experience. The following
-example demonstrates how to
-use the hook to integrate your own API that streams back the results
+example demonstrates how to use the hook to integrate your own API
+that streams the results.
+
+_Please note_: Your API has to return `text/event-stream`.
 
 ```tsx
 import React from 'react';
 import useChatStream from '@magicul/react-chat-stream';
 
 function App() {
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit
-  } = useChatStream({
+  const { messages, input, handleInputChange, handleSubmit } = useChatStream({
     options: {
       url: 'https://your-api-url',
       method: 'POST',
@@ -54,19 +57,20 @@ function App() {
     method: {
       type: 'body',
       key: 'prompt',
-    }
+    },
   });
 
   return (
     <div>
       {messages.map((message, index) => (
         <div key={message.id}>
-          <p>{message.role}: {message.content}</p>
+          <p>
+            {message.role}: {message.content}
+          </p>
         </div>
       ))}
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={handleInputChange}
-               value={input} />
+        <input type="text" onChange={handleInputChange} value={input} />
         <button type="submit">Send</button>
       </form>
     </div>
@@ -77,13 +81,8 @@ export default App;
 ```
 
 The `useChatStream` hook provides a variable named `messages`. This
-messages variable originates from the internal state of the hook, and
-it contains the chat messages that were sent and were received from
-your API. These messages are delivered to your application as a
-stateful array, updated in real-time as new chat messages are received
-and sent. As a consumer of the hook, you can readily use
-the `messages` variable in your component to display the ongoing
-conversation. The `messages` variable will change and will get
+`messages` variable comes from the internal state of the hook. It contains the chat message reply received from
+your API. Messages are updated in real-time as the stream continues to receive messages. The `messages` variable will change and will get
 appended with new messages received from your backend.
 
 **Important: For this to work, your API must stream back the results
