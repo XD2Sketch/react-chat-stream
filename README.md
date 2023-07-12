@@ -139,6 +139,11 @@ The output of this hook is an object with the following properties:
 - isLoading: `boolean` - a boolean indicating whether the request is
   in progress.
 
+## Examples
+
+If you want to see a working example, check out the [example](./example)
+folder for an example on how to use this package.
+
 ## Important Notes:
 
 For those utilizing Next.js version 13 or higher as the server-side
