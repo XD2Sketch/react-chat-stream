@@ -79,7 +79,7 @@ messages variable originates from the internal state of the hook, and
 it contains the chat messages that were sent and were received from
 your API. These messages are delivered to your application as a
 stateful array, updated in real-time as new chat messages are received
-and sent. As a consumer of the hook, you can readily use the messages
+and sent. As a consumer of the hook, you can readily use the `messages`
 variable in your component to display the ongoing conversation.
 
 **Important: For this to work, your API must stream back the results
