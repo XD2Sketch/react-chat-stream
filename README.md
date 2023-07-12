@@ -11,7 +11,7 @@ chat streams returned by your backend. Let messages appear word-by-word similar 
 
 ## What's this package about?
 
-Are you building a ChatGPT-like chat interface? Then most likely you'll want to integrate a chat that has the messages appear word-by-word, similar to ChatGPT. Vercel recently release the [Vercel AI SDK](https://vercel.com/blog/introducing-the-vercel-ai-sdk#streaming-first-ui-helpers) which adds _Streaming First UI Helper_, but what if you want to integrate your own backend? This package solves exactly that pain point. We've abstracted the logic into a React Hook to take care of handling everything for you.
+Are you building a ChatGPT-like chat interface? Then most likely you'll want to integrate a chat that has the messages appear word-by-word, similar to ChatGPT. Vercel recently released the [Vercel AI SDK](https://vercel.com/blog/introducing-the-vercel-ai-sdk#streaming-first-ui-helpers) which adds _Streaming First UI Helper_, but what if you want to integrate your own backend? This package solves exactly that pain point. We've abstracted the logic into a React Hook to take care of handling everything for you.
 
 ## How does it work?
 
