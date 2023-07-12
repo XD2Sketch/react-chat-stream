@@ -1,4 +1,4 @@
-# @magicul/react-chat-stream
+  # @magicul/react-chat-stream
 
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@magicul/react-chat-stream)
 ![npm](https://img.shields.io/npm/dt/react-chat-stream)
@@ -6,12 +6,12 @@
 ![npm](https://img.shields.io/npm/v/@magicul/react-chat-stream)
 ![GitHub Repo stars](https://img.shields.io/github/stars/XD2Sketch/react-chat-stream?style=social)
 
-Introducing @magicul/react-chat-stream, a highly flexible and powerful
-React hook designed to simplify the integration of your own AI-driven
-chat streaming API, such as ChatGPT, in your React applications. With
-this modern tool, developers can effortlessly build interactive and
-dynamic chat interfaces that provide real-time response from AI
-models.
+Introducing @magicul/react-chat-stream: A React hook designed to simplify integrating 
+chat streams returned by your backend. Let messages appear word-by-word similar to ChatGPT.
+
+## What's this package about?
+
+Are you building a ChatGPT-like chat interface? Then most likely you'll want to integrate a chat that has the messages appear word-by-word, similar to ChatGPT. Vercel recently release the [Vercel AI SDK](https://vercel.com/blog/introducing-the-vercel-ai-sdk#streaming-first-ui-helpers) which adds _Streaming First UI Helper_, but what if you want to integrate your own backend? This package solves exactly that pain point. We've abstracted the logic into a React Hook to take care of handling everything for you.
 
 ## Installation
 
