@@ -25,7 +25,7 @@ export const getStream = async (input: string, options: UseChatStreamOptions, me
 
 export async function* decodeStreamToJson(
   data: ReadableStream<Uint8Array> | null,
-) {
+): AsyncIterableIterator<string> {
   if (!data) return;
 
   const reader = data.getReader();

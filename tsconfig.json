@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["dom", "es2015"],
+    "lib": [
+      "dom",
+      "es2015",
+      "es2018.asynciterable"
+    ],
     "jsx": "react",
     "declaration": true,
     "declarationMap": true,
