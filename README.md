@@ -30,7 +30,7 @@ yarn add @magicul/react-chat-stream
 ## Using your own API to stream back chat-like responses (similar to ChatGPT).
 
 With the `useChatStream` hook, you can easily integrate your own API
-to stream chat responses. The following example demonstrates how to
+to stream chat responses. Responses from your backend will appear word-by-word to give it a ChatGPT-like user experience. The following example demonstrates how to
 use the hook to integrate your own API that streams back the results
 
 ```tsx
