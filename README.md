@@ -14,8 +14,7 @@ chat streams returned by your backend. Let messages appear word-by-word similar 
 Are you building a ChatGPT-like chat interface? Then most likely you'll want to integrate a chat that has the messages appear word-by-word, similar to ChatGPT. Vercel recently released the [Vercel AI SDK](https://vercel.com/blog/introducing-the-vercel-ai-sdk#streaming-first-ui-helpers) which adds _Streaming First UI Helper_, but what if you want to integrate your own backend? This package solves exactly that pain point. We've abstracted the logic into a React Hook to take care of handling everything for you.
 
 ## How does it work?
-
-![react-chat-stream-demo-long](https://github.com/XD2Sketch/react-chat-stream/assets/5519740/ab8453e6-1758-4a1e-8bf2-02f587f8c94f)
+![react-chat-stream-demo-long](https://github.com/XD2Sketch/react-chat-stream/assets/5519740/178abe91-e30c-4f33-82cd-64dd66809377)
 
 If you're backend returns `text/event-stream` then you can use this package. This package does not "fake" this response by imitating the word-by-word appearance. It will literally take the responses from your backend as them come in through the stream. The hook provides a `messages` object which will change so you can display it as the result gets delivered.
 
