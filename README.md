@@ -1,7 +1,7 @@
 # @magicul/react-chat-stream
 
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@magicul/react-chat-stream)
-![npm](https://img.shields.io/npm/dt/react-chat-stream)
+![npm](https://img.shields.io/npm/dt/@magicul/react-chat-stream)
 ![GitHub issues](https://img.shields.io/github/issues/XD2Sketch/react-chat-stream)
 ![npm](https://img.shields.io/npm/v/@magicul/react-chat-stream)
 ![GitHub Repo stars](https://img.shields.io/github/stars/XD2Sketch/react-chat-stream?style=social)
