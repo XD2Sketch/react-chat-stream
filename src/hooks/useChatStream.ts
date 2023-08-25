@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { decodeStreamToJson, getStream } from '../utils/streams';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,6 +14,7 @@ type ChatMessage = {
 
 type UseChatStreamResult = {
   messages: ChatMessage[];
+  setMessages: Dispatch<SetStateAction<ChatMessage[]>>
   input: string;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
@@ -90,6 +91,7 @@ const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
 
   return {
     messages,
+    setMessages,
     input: message,
     handleInputChange,
     handleSubmit,
