@@ -19,7 +19,7 @@ export const getStream = async (input: string, options: UseChatStreamOptions, me
   const response = await fetch(options.url + params, { 
     method: options.method,
     headers: options.headers,
-    body: JSON.stringify(options.body)
+    body: JSON.stringify(options.body, (_k, v) => v === null ? undefined : v)
   });
 
   if (!response.ok) throw new Error(response.statusText);
