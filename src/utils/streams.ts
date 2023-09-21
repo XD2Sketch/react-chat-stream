@@ -4,7 +4,6 @@ import type {
 } from '../hooks/useChatStream';
 
 const mergeInputInOptions = (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
-  options.body = options.body ?? {};
   options.query = options.query ?? {};
   (options[method.type] as Record<string, unknown>)[method.key] = input;
 
@@ -15,8 +14,9 @@ export const getStream = async (input: string, options: UseChatStreamOptions, me
   options = mergeInputInOptions(input, options, method);
 
   const params = '?' + new URLSearchParams(options.query).toString();
+  console.log(JSON.stringify(options.body, (_k, v) => v === null ? undefined : v));
 
-  const response = await fetch(options.url + params, { 
+  const response = await fetch(options.url + params, {
     method: options.method,
     headers: options.headers,
     body: JSON.stringify(options.body, (_k, v) => v === null ? undefined : v)
