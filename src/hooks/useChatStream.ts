@@ -75,10 +75,10 @@ const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
     }
   };
 
-  const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e?: FormEvent<HTMLFormElement>, newMessage?: string) => {
     setIsLoading(true);
     e?.preventDefault();
-    addMessageToChat(message);
+    addMessageToChat(newMessage ?? message);
     setMessage('');
 
     try {
