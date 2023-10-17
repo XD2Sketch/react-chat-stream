@@ -18,7 +18,7 @@ type UseChatStreamResult = {
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (event?: FormEvent<HTMLFormElement>, newMessage?: string) => void;
   isLoading: boolean;
 }
 
