@@ -16,6 +16,7 @@ type UseChatStreamResult = {
   messages: ChatMessage[];
   setMessages: Dispatch<SetStateAction<ChatMessage[]>>
   input: string;
+  setInput: Dispatch<SetStateAction<string>>;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -93,6 +94,7 @@ const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
     messages,
     setMessages,
     input: message,
+    setInput: setMessage,
     handleInputChange,
     handleSubmit,
     isLoading,
