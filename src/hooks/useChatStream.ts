@@ -64,7 +64,7 @@ const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
     });
   };
 
-  const fetchAndUpdateAIResponse = async () => {
+  const fetchAndUpdateAIResponse = async (message: string) => {
     const stream = await getStream(message, input.options, input.method);
     if (!stream) throw new Error();
 
@@ -82,7 +82,7 @@ const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
     setMessage('');
 
     try {
-      await fetchAndUpdateAIResponse();
+      await fetchAndUpdateAIResponse(newMessage ?? message);
     } catch {
       addMessageToChat(BOT_ERROR_MESSAGE, 'bot');
     }
