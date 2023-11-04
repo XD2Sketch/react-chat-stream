@@ -12,16 +12,6 @@ type ChatMessage = {
   id: string;
 }
 
-type UseChatStreamResult = {
-  messages: ChatMessage[];
-  setMessages: Dispatch<SetStateAction<ChatMessage[]>>
-  input: string;
-  setInput: Dispatch<SetStateAction<string>>;
-  handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event?: FormEvent<HTMLFormElement>, newMessage?: string) => void;
-  isLoading: boolean;
-}
-
 export type UseChatStreamOptions = {
   url: string;
   method: HttpMethod;
@@ -40,12 +30,12 @@ type UseChatStreamInput = {
   method: UseChatStreamInputMethod,
 };
 
-const useChatStream = (input: UseChatStreamInput): UseChatStreamResult => {
+const useChatStream = (input: UseChatStreamInput) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 

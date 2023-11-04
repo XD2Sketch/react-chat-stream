@@ -1,7 +1,7 @@
 {
   "name": "@magicul/react-chat-stream",
   "description": "A React hook that lets you easily integrate your custom ChatGPT-like chat in React.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/XD2Sketch/react-chat-stream#readme",
