@@ -8,8 +8,7 @@ const DEFAULT_HEADERS = {
 };
 
 const mergeInputInOptions = (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
-  options.query = options.query ?? {};
-  (options[method.type] as Record<string, unknown>)[method.key] = input;
+  (options[method.type] ?? {})[method.key] = input;
 
   return options;
 };
