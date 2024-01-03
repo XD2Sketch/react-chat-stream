@@ -3,6 +3,10 @@ import type {
   UseChatStreamOptions
 } from '../hooks/useChatStream';
 
+const DEFAULT_HEADERS = {
+  'Content-Type': 'application/json',
+};
+
 const mergeInputInOptions = (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
   options.query = options.query ?? {};
   (options[method.type] as Record<string, unknown>)[method.key] = input;
@@ -18,7 +22,10 @@ export const getStream = async (input: string, options: UseChatStreamOptions, me
 
   const response = await fetch(options.url + params, {
     method: options.method,
-    headers: options.headers,
+    headers: {
+      ...DEFAULT_HEADERS,
+      ...options.headers
+    },
     body: JSON.stringify(options.body, (_k, v) => v === null ? undefined : v)
   });
 
