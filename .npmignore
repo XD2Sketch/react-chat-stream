@@ -1,6 +1,6 @@
 .github
 .eslintrc
-.eslintignore
+.eslintignore.json
 .prettierignore
 .prettierrc
 example
