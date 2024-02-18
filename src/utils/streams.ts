@@ -1,31 +1,24 @@
-import type {
-  UseChatStreamInputMethod,
-  UseChatStreamOptions
-} from '../hooks/useChatStream';
+import { UseChatStreamHttpOptions, UseChatStreamInputMethod } from '../types';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 };
 
-const mergeInputInOptions = (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
+const mergeInputInOptions = (input: string, options: UseChatStreamHttpOptions, method: UseChatStreamInputMethod) => {
   options.query = options.query ?? {};
   (options[method.type] as Record<string, unknown>)[method.key] = input;
 
   return options;
 };
 
-export const getStream = async (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
+export const getStream = async (input: string, options: UseChatStreamHttpOptions, method: UseChatStreamInputMethod) => {
   options = mergeInputInOptions(input, options, method);
 
   const params = '?' + new URLSearchParams(options.query).toString();
-  console.log(JSON.stringify(options.body, (_k, v) => v === null ? undefined : v));
 
   const response = await fetch(options.url + params, {
     method: options.method,
-    headers: {
-      ...DEFAULT_HEADERS,
-      ...options.headers
-    },
+    headers: { ...DEFAULT_HEADERS, ...options.headers },
     body: JSON.stringify(options.body, (_k, v) => v === null ? undefined : v)
   });
 
