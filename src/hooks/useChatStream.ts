@@ -58,7 +58,7 @@ const useChatStream = (input: UseChatStreamInput) => {
     setFormInput('');
 
     try {
-      const addedMessage = await fetchAndUpdateAIResponse(formInput);
+      const addedMessage = await fetchAndUpdateAIResponse(message ?? formInput);
       await input.handlers.onMessageAdded?.(addedMessage);
     } catch {
       const addedMessage = addMessage({ content: BOT_ERROR_MESSAGE, role: 'bot' });
