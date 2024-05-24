@@ -1,17 +1,17 @@
-import { UseChatStreamHttpOptions, UseChatStreamInputMethod } from '../types';
+import { UseChatStreamOptions, UseChatStreamInputMethod } from '../types';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 };
 
-const mergeInputInOptions = (input: string, options: UseChatStreamHttpOptions, method: UseChatStreamInputMethod) => {
+const mergeInputInOptions = (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
   options.query = options.query ?? {};
   (options[method.type] as Record<string, unknown>)[method.key] = input;
 
   return options;
 };
 
-export const getStream = async (input: string, options: UseChatStreamHttpOptions, method: UseChatStreamInputMethod) => {
+export const getStream = async (input: string, options: UseChatStreamOptions, method: UseChatStreamInputMethod) => {
   options = mergeInputInOptions(input, options, method);
 
   const params = '?' + new URLSearchParams(options.query).toString();

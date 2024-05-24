@@ -10,12 +10,13 @@ export type UseChatStreamChatMessage = {
   id: string,
 }
 
-export type UseChatStreamHttpOptions = {
+export type UseChatStreamOptions = {
   url: string;
   method: HttpMethod;
   query?: Record<string, string>;
   headers?: HeadersInit;
   body?: Record<string, string>;
+  fakeCharactersPerSecond?: number;
 }
 
 export type UseChatStreamEventHandlers = {
@@ -28,9 +29,9 @@ export type UseChatStreamInputMethod = {
 }
 
 export type UseChatStreamInput = {
-  options: UseChatStreamHttpOptions,
+  options: UseChatStreamOptions,
   method: UseChatStreamInputMethod,
-  handlers: UseChatStreamEventHandlers
+  handlers: UseChatStreamEventHandlers,
 };
 
 export type UseChatStreamResult = ReturnType<typeof useChatStream>;

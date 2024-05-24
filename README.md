@@ -113,6 +113,8 @@ properties:
 - headers: `object (optional)` - the headers to include in the
   request.
 - body: `object (optional)` - the body of the request.
+- fakeCharactersPerSecond: `number (optional)` - the number of
+  characters to display per second. If this is unused the hook will display the messages as they come in.
 
 #### method
 

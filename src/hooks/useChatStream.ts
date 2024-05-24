@@ -37,13 +37,27 @@ const useChatStream = (input: UseChatStreamInput) => {
   };
 
   const fetchAndUpdateAIResponse = async (message: string) => {
+    const charactersPerSecond = input.options.fakeCharactersPerSecond;
     const stream = await getStream(message, input.options, input.method);
     const initialMessage = addMessage({ content: '', role: 'bot' });
     let response = '';
 
-    for await (const message of decodeStreamToJson(stream)) {
-      appendMessageToChat(message);
-      response += message;
+    for await (const chunk of decodeStreamToJson(stream)) {
+      if (!charactersPerSecond) {
+        appendMessageToChat(chunk);
+        response += chunk;
+        continue;
+      }
+
+      // Stream characters one by one based on the characters per second that is set.
+      for (const char of chunk) {
+        appendMessageToChat(char);
+        response += char;
+
+        if (charactersPerSecond > 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000 / charactersPerSecond));
+        }
+      }
     }
 
     return { ...initialMessage, content: response };
