@@ -7,6 +7,7 @@ export type UseChatStreamRole = 'bot' | 'user';
 export type UseChatStreamChatMessage = {
   role: UseChatStreamRole;
   content: string;
+  metadata?: {};
   id: string,
 }
 
@@ -17,6 +18,7 @@ export type UseChatStreamOptions = {
   headers?: HeadersInit;
   body?: Record<string, string>;
   fakeCharactersPerSecond?: number;
+  useMetadata?: boolean;
 }
 
 export type UseChatStreamEventHandlers = {
