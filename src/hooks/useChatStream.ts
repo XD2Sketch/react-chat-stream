@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { decodeStreamToJson, getStream } from '../utils/streams';
 import { UseChatStreamChatMessage, UseChatStreamInput } from '../types';
+import { extractJsonFromEnd } from '../utils/json';
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
@@ -41,7 +42,6 @@ const useChatStream = (input: UseChatStreamInput) => {
     const stream = await getStream(message, input.options, input.method);
     const initialMessage = addMessage({ content: '', role: 'bot' });
     let response = '';
-    let metadata = {};
 
     for await (const chunk of decodeStreamToJson(stream)) {
       if (!charactersPerSecond) {
@@ -51,10 +51,10 @@ const useChatStream = (input: UseChatStreamInput) => {
       }
 
       if (input.options.useMetadata) {
-        try {
-          metadata = JSON.parse(chunk.trim());
+        const metadata = extractJsonFromEnd(chunk);
+        if (metadata) {
           return { ...initialMessage, content: response, metadata: metadata };
-        } catch {}
+        }
       }
 
       // Stream characters one by one based on the characters per second that is set.
