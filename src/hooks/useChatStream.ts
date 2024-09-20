@@ -41,12 +41,20 @@ const useChatStream = (input: UseChatStreamInput) => {
     const stream = await getStream(message, input.options, input.method);
     const initialMessage = addMessage({ content: '', role: 'bot' });
     let response = '';
+    let metadata = {};
 
     for await (const chunk of decodeStreamToJson(stream)) {
       if (!charactersPerSecond) {
         appendMessageToChat(chunk);
         response += chunk;
         continue;
+      }
+
+      if (input.options.useMetadata) {
+        try {
+          metadata = JSON.parse(chunk.trim());
+          return { ...initialMessage, content: response, metadata: metadata };
+        } catch {}
       }
 
       // Stream characters one by one based on the characters per second that is set.
