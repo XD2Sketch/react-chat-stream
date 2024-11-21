@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { decodeStreamToJson, getStream } from '../utils/streams';
 import { UseChatStreamChatMessage, UseChatStreamInput } from '../types';
-import { extractJsonFromEnd } from '../utils/json';
+import { extractJsons } from '../utils/json';
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
@@ -50,13 +50,6 @@ const useChatStream = (input: UseChatStreamInput) => {
         continue;
       }
 
-      if (input.options.useMetadata) {
-        const metadata = extractJsonFromEnd(chunk);
-        if (metadata) {
-          return { ...initialMessage, content: response, metadata: metadata };
-        }
-      }
-
       // Stream characters one by one based on the characters per second that is set.
       for (const char of chunk) {
         appendMessageToChat(char);
@@ -71,6 +64,43 @@ const useChatStream = (input: UseChatStreamInput) => {
     return { ...initialMessage, content: response };
   };
 
+  const fetchAndUpdateAIResponseWithMetadata = async (message: string) => {
+    const charactersPerSecond = input.options.fakeCharactersPerSecond;
+    const stream = await getStream(message, input.options, input.method);
+    const initialMessage = addMessage({ content: '', role: 'bot' });
+    let response = '';
+    let metadata = null;
+
+    for await (const chunk of decodeStreamToJson(stream)) {
+      const jsonObjects = extractJsons(chunk);
+
+      for (const parsedChunk of jsonObjects) {
+        if (parsedChunk.type === 'content') {
+          const content = parsedChunk.data;
+
+          if (!charactersPerSecond) {
+            appendMessageToChat(content);
+            response += content;
+            continue;
+          }
+
+          for (const char of content) {
+            appendMessageToChat(char);
+            response += char;
+
+            if (charactersPerSecond > 0) {
+              await new Promise(resolve => setTimeout(resolve, 1000 / charactersPerSecond));
+            }
+          }
+        } else if (parsedChunk.type === 'metadata') {
+          metadata = parsedChunk.data;
+        }
+      }
+    }
+
+    return { ...initialMessage, content: response, metadata };
+  };
+
   const submitMessage = async (message: string) => resetInputAndGetResponse(message);
 
   const resetInputAndGetResponse = async (message?: string) => {
@@ -80,8 +110,13 @@ const useChatStream = (input: UseChatStreamInput) => {
     setFormInput('');
 
     try {
-      const addedMessage = await fetchAndUpdateAIResponse(message ?? formInput);
-      await input.handlers.onMessageAdded?.(addedMessage);
+      if (input.options.useMetadata) {
+        const addedMessage = await fetchAndUpdateAIResponseWithMetadata(message ?? formInput);
+        await input.handlers.onMessageAdded?.(addedMessage);
+      } else {
+        const addedMessage = await fetchAndUpdateAIResponse(message ?? formInput);
+        await input.handlers.onMessageAdded?.(addedMessage);
+      }
     } catch {
       const addedMessage = addMessage({ content: BOT_ERROR_MESSAGE, role: 'bot' });
       await input.handlers.onMessageAdded?.(addedMessage);

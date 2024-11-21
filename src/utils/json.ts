@@ -1,20 +1,28 @@
-export const extractJsonFromEnd = (chunk: string) => {
-  const chunkTrimmed = chunk.trim();
+export const extractJsons = (chunk: string) => {
+  const jsonObjects = [];
+  const braceStack = [];
+  let currentJsonStart = null;
 
-  const jsonObjectRegex = /({[^]*})\s*$/;
-  const match = chunkTrimmed.match(jsonObjectRegex);
+  for (let i = 0; i < chunk.length; i++) {
+    const char = chunk[i];
 
-  if (!match) {
-    return null;
+    if (char === '{') {
+      if (braceStack.length === 0) {
+        currentJsonStart = i;
+      }
+      braceStack.push('{');
+    } else if (char === '}') {
+      braceStack.pop();
+      if (braceStack.length === 0 && currentJsonStart !== null) {
+        const potentialJson = chunk.substring(currentJsonStart, i + 1);
+        try {
+          const parsedJson = JSON.parse(potentialJson);
+          jsonObjects.push(parsedJson);
+        } catch {}
+        currentJsonStart = null;
+      }
+    }
   }
 
-  const jsonStr = match[1];
-  try {
-    const parsedData = JSON.parse(jsonStr);
-    if (typeof parsedData === 'object' && parsedData !== null && !Array.isArray(parsedData)) {
-      return parsedData;
-    }
-  } catch {}
-
-  return null;
+  return jsonObjects;
 };
