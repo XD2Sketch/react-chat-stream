@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { decodeStreamToJson, getStream } from '../utils/streams';
 import { UseChatStreamChatMessage, UseChatStreamInput } from '../types';
-import { extractJsonFromEnd } from '../utils/json';
+import { getJsonObjectsFromChunks } from '../utils/json';
 
 const BOT_ERROR_MESSAGE = 'Something went wrong fetching AI response.';
 
@@ -10,7 +10,9 @@ const useChatStream = (input: UseChatStreamInput) => {
   const [formInput, setFormInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     setFormInput(e.target.value);
   };
 
@@ -37,28 +39,21 @@ const useChatStream = (input: UseChatStreamInput) => {
     });
   };
 
-  const fetchAndUpdateAIResponse = async (message: string) => {
+  const fetchAndUpdateAIResponse = async (message: string, useMetadata: boolean) => {
     const charactersPerSecond = input.options.fakeCharactersPerSecond;
     const stream = await getStream(message, input.options, input.method);
     const initialMessage = addMessage({ content: '', role: 'bot' });
     let response = '';
+    let metadata = null;
 
-    for await (const chunk of decodeStreamToJson(stream)) {
+    const processContent = async (content: string) => {
       if (!charactersPerSecond) {
-        appendMessageToChat(chunk);
-        response += chunk;
-        continue;
+        appendMessageToChat(content);
+        response += content;
+        return;
       }
 
-      if (input.options.useMetadata) {
-        const metadata = extractJsonFromEnd(chunk);
-        if (metadata) {
-          return { ...initialMessage, content: response, metadata: metadata };
-        }
-      }
-
-      // Stream characters one by one based on the characters per second that is set.
-      for (const char of chunk) {
+      for (const char of content) {
         appendMessageToChat(char);
         response += char;
 
@@ -66,9 +61,25 @@ const useChatStream = (input: UseChatStreamInput) => {
           await new Promise(resolve => setTimeout(resolve, 1000 / charactersPerSecond));
         }
       }
+    };
+
+    for await (const chunk of decodeStreamToJson(stream)) {
+      if (useMetadata) {
+        const jsonObjects = getJsonObjectsFromChunks(chunk);
+
+        for (const parsedChunk of jsonObjects) {
+          if (parsedChunk.type === 'content') {
+            await processContent(parsedChunk.data);
+          } else if (parsedChunk.type === 'metadata') {
+            metadata = parsedChunk.data;
+          }
+        }
+      } else {
+        await processContent(chunk);
+      }
     }
 
-    return { ...initialMessage, content: response };
+    return { ...initialMessage, content: response, ...(useMetadata && { metadata }) };
   };
 
   const submitMessage = async (message: string) => resetInputAndGetResponse(message);
@@ -80,7 +91,10 @@ const useChatStream = (input: UseChatStreamInput) => {
     setFormInput('');
 
     try {
-      const addedMessage = await fetchAndUpdateAIResponse(message ?? formInput);
+      const addedMessage = await fetchAndUpdateAIResponse(
+        message ?? formInput,
+        input.options.useMetadata ?? false,
+      );
       await input.handlers.onMessageAdded?.(addedMessage);
     } catch {
       const addedMessage = addMessage({ content: BOT_ERROR_MESSAGE, role: 'bot' });
@@ -88,7 +102,7 @@ const useChatStream = (input: UseChatStreamInput) => {
     } finally {
       setIsStreaming(false);
     }
-  }
+  };
 
   return {
     messages,
