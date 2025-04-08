@@ -18,6 +18,7 @@ export const getStream = async (input: string, options: UseChatStreamOptions, me
 
   const response = await fetch(options.url + params, {
     method: options.method,
+    credentials: 'include',
     headers: { ...DEFAULT_HEADERS, ...options.headers },
     body: JSON.stringify(options.body, (_k, v) => v === null ? undefined : v)
   });
